@@ -1,0 +1,29 @@
+{
+  "name": "event-next-door",
+  "version": "1.0.0",
+  "description": "An event booking application",
+  "main": "backend/scripts/server.js",
+  "scripts": {
+    "start": "node backend/scripts/server.js",
+    "dev": "nodemon backend/scripts/server.js"
+  },
+  "keywords": [
+    "events",
+    "booking",
+    "supabase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

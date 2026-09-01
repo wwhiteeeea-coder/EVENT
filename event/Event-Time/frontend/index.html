@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tired of sitting indoors? worry no more cause event next door got you🎆">
+    <title>Event Next Door - Home</title>
+    <link rel="stylesheet" href="css/next-door.css">
+</head>
+<body>
+    <button class="nav-toggle" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-links">
+  <!-- your nav links here -->
+</div>
+    <nav style="background-color: rgba(17, 6, 6, 0.96); padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="color: rgb(246, 242, 242); font-weight: bold; font-size: 18px;">Event Next Door</div>
+        <div id="userNav" style="color: rgb(246, 242, 242);">
+            <a href="event_list.html"class="nav-link" style="color: rgb(246, 242, 242); text-decoration: none; margin-right: 15px; font-weight: bold;">Browse Events</a>
+            <a href="login.html" class="nav-link" style="color: rgb(246, 242, 242); text-decoration: none; margin-right: 15px; font-weight: bold;">LogIn</a>
+            <a href="register.html" class="nav-link" style="color: rgb(246, 242, 242); text-decoration: none; font-weight: bold;">Register</a>
+        </div>
+    </nav>
+
+    <div class="bag">
+   <section class="hero">
+    <div class="hero-left">
+        <img src="./image/frontphase.png" alt="Event crowd">
+    </div>
+    <div class="hero-right">
+        <h1>Event  Next  Door</h1>
+        <p>Discover events that bring people together - right next door.</p>
+        <button class="cta"  ><a href="event_list.html">Explore Event</a></button>
+    </div>
+   </section>
+ 
+   
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
+
+
+
+    

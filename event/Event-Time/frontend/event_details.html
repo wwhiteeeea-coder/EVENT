@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Event details and booking - Event Next Door">
+    <title>Event Details - Event Next Door</title>
+    <link rel="stylesheet" href="css/event_list.css">
+    <link rel="stylesheet" href="css/event_list_additions.css">
+    <link rel="stylesheet" href="css/event_details.css">
+</head>
+<body>
+    <header>
+        <button class="nav-toggle" onclick="this.nextElementSibling.classList.toggle('open')" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-links">
+  <!-- your nav links here -->
+</div>
+        <nav class="block">
+            <a href="index.html">Home</a>
+            <div id="userNav" style="color: rgb(246, 242, 242);">
+                <span id="userGreeting"></span>
+            </div>
+        </nav>
+
+        <nav class="link">
+            <a href="event_list.html#trending">Trending</a>
+            <a href="event_list.html#music">Music, Social & Cultural</a>
+            <a href="event_list.html#adventures">Adventures</a>
+            <a href="my-bookings.html" class="booking-btn" style="background-color: #ff9800; padding: 8px 16px; border-radius: 4px;">My Bookings</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="eventDetailsContainer" class="event-details-container">
+            <p class="events-status">Loading event...</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Event Next Door</h3>
+            <p>Email: info@eventnextdoor.com</p>
+            <p>Phone: +254 741 938 327</p>
+            <p>&copy; 2026 Event Next Door. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/event_details.js"></script>
+</body>
+</html>

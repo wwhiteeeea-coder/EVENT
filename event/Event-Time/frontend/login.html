@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Event Next Door</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="14" fill="url(#gradient)"/>
+                <path d="M16 8L20 14H12L16 8Z" fill="white"/>
+                <defs>
+                    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                        <stop offset="0%" stop-color="#8B5CF6"/>
+                        <stop offset="100%" stop-color="#EC4899"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>Event Next Door</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#explore">Explore Events</a>
+            <a href="register.html" class="nav-cta">Register</a>
+        </div>
+    </nav>
+
+    <!-- Auth Wrapper -->
+    <div class="auth-wrapper">
+        <!-- Hero Section -->
+        <div class="auth-hero">
+            <div>
+                <h1>Welcome <span class="highlight">Back</span></h1>
+                <p>Log in to your account and discover amazing events happening near you.</p>
+            </div>
+
+            <div class="auth-features">
+                <div class="feature-item">
+                    <span class="feature-icon">🎉</span>
+                    <div class="feature-content">
+                        <h3>Discover Events</h3>
+                        <p>Find exciting events tailored to your interests</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">👥</span>
+                    <div class="feature-content">
+                        <h3>Connect with People</h3>
+                        <p>Meet like-minded people who share your passions</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📸</span>
+                    <div class="feature-content">
+                        <h3>Create Memories</h3>
+                        <p>Attend events and create unforgettable experiences</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form Container -->
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Sign In</h2>
+                <p>Enter your credentials to access your account</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage"></div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="you@example.com"
+                        required
+                    >
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••"
+                        required
+                    >
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="forgot-password.html">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>Sign In</span>
+                </button>
+            </form>
+
+            <!-- Social Divider -->
+            <div class="social-divider">or continue with</div>
+
+            <!-- Social Login -->
+            <div class="social-login">
+                <button type="button" class="btn btn-secondary btn-google" id="googleBtn">
+                    <span class="icon">G</span>
+                    <span>Google</span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="githubBtn">
+                    <span class="icon">⚙️</span>
+                    <span>GitHub</span>
+                </button>
+            </div>
+
+            <!-- Auth Footer -->
+            <div class="auth-footer">
+                <p>Don't have an account?</p>
+                <a href="register.html" class="auth-link">Create one now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

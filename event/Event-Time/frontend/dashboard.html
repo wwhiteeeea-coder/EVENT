@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Next Door - Discover Events</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" fill="url(#gradient)"/>
+                    <path d="M16 8L20 14H12L16 8Z" fill="white"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#8B5CF6"/>
+                            <stop offset="100%" stop-color="#EC4899"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Event<br>Next Door</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active">
+                    <span class="icon">🏠</span> Dashboard
+                </a>
+                <a href="#explore" class="nav-item">
+                    <span class="icon">🔍</span> Explore Events
+                </a>
+                <a href="#my-events" class="nav-item">
+                    <span class="icon">📅</span> My Events
+                </a>
+                <a href="#saved" class="nav-item">
+                    <span class="icon">📌</span> Saved
+                </a>
+                <a href="#tickets" class="nav-item">
+                    <span class="icon">🎫</span> Tickets
+                </a>
+                <a href="#messages" class="nav-item">
+                    <span class="icon">💬</span> Messages
+                </a>
+                <a href="#notifications" class="nav-item">
+                    <span class="icon">🔔</span> Notifications
+                </a>
+                <a href="#profile" class="nav-item">
+                    <span class="icon">👤</span> Profile
+                </a>
+                <a href="#settings" class="nav-item">
+                    <span class="icon">⚙️</span> Settings
+                </a>
+            </nav>
+
+            <div class="host-section">
+                <p>Host an Event?</p>
+                <p class="subtitle">Share what you love with your community.</p>
+                <button class="btn-create-event">
+                    <span class="icon">+</span> Create Event
+                </button>
+            </div>
+
+            <div class="user-card">
+                <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
+                <div class="user-info">
+                    <p class="user-name">Alex Mwangi</p>
+                    <p class="user-email">alex@mail.com</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search events, people or categories...">
+                </div>
+
+                <div class="location-selector">
+                    <span class="location-icon">📍</span>
+                    <select id="locationSelect">
+                        <option>Nairobi, Kenya</option>
+                        <option>Mombasa, Kenya</option>
+                        <option>Kisumu, Kenya</option>
+                    </select>
+                </div>
+
+                <button class="btn-create-event-header">
+                    <span class="icon">+</span> Create Event
+                </button>
+
+                <div class="user-actions">
+                    <button class="notification-btn">
+                        <span class="icon">🔔</span>
+                        <span class="badge">1</span>
+                    </button>
+                    <img src="https://via.placeholder.com/40" alt="User" class="user-avatar-header">
+                </div>
+            </header>
+
+            <!-- Hero Banner -->
+            <section class="hero-banner">
+                <div class="hero-content">
+                    <h1>Discover Events That Bring People <span class="highlight">Together</span></h1>
+                    <p>Explore events happening near you and make every moment count.</p>
+                    <button class="btn-primary">
+                        <span class="icon">✓</span> Explore Events
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <img src="https://via.placeholder.com/600x300" alt="Festival">
+                </div>
+            </section>
+
+            <!-- Upcoming Events Section -->
+            <section class="upcoming-events">
+                <div class="section-header">
+                    <h2>Upcoming Events</h2>
+                    <a href="#view-all" class="view-all">View all</a>
+                </div>
+
+                <div class="events-grid">
+                    <div class="event-card">
+                        <div class="event-date">24<br><small>MAY</small></div>
+                        <img src="https://via.placeholder.com/300x200" alt="Event" class="event-image">
+                        <div class="event-info">
+                            <h3>Sunset Music Festival</h3>
+                            <p class="event-category">Music • Uhuru Gardens</p>
+                            <p class="event-time">📅 Sat, 24 May 2025 • 2:00 PM</p>
+                            <div class="event-attendees">
+                                <div class="avatars">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <span class="more">+2</span>
+                                </div>
+                                <button class="save-btn">📌</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">26<br><small>MAY</small></div>
+                        <img src="https://via.placeholder.com/300x200" alt="Event" class="event-image">
+                        <div class="event-info">
+                            <h3>Nairobi Food Market</h3>
+                            <p class="event-category">Food & Drink • The Alchemist</p>
+                            <p class="event-time">📅 Mon, 26 May 2025 • 11:00 AM</p>
+                            <div class="event-attendees">
+                                <div class="avatars">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <span class="more">+3</span>
+                                </div>
+                                <button class="save-btn">📌</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">28<br><small>MAY</small></div>
+                        <img src="https://via.placeholder.com/300x200" alt="Event" class="event-image">
+                        <div class="event-info">
+                            <h3>Digital Nomad Meetup</h3>
+                            <p class="event-category">Networking • iHub</p>
+                            <p class="event-time">📅 Wed, 28 May 2025 • 6:00 PM</p>
+                            <div class="event-attendees">
+                                <div class="avatars">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <span class="more">+1</span>
+                                </div>
+                                <button class="save-btn">📌</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">31<br><small>MAY</small></div>
+                        <img src="https://via.placeholder.com/300x200" alt="Event" class="event-image">
+                        <div class="event-info">
+                            <h3>Community Fun Run</h3>
+                            <p class="event-category">Health • Karura Forest</p>
+                            <p class="event-time">📅 Sat, 31 May 2025 • 7:00 AM</p>
+                            <div class="event-attendees">
+                                <div class="avatars">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <img src="https://via.placeholder.com/24" alt="">
+                                    <span class="more">+2</span>
+                                </div>
+                                <button class="save-btn">📌</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Browse by Category -->
+            <section class="browse-categories">
+                <h2>Browse by Category</h2>
+                <div class="categories-grid">
+                    <div class="category-card music">
+                        <span class="icon">🎵</span>
+                        <h3>Music</h3>
+                        <p>128 events</p>
+                    </div>
+                    <div class="category-card food">
+                        <span class="icon">🍽️</span>
+                        <h3>Food & Drink</h3>
+                        <p>96 events</p>
+                    </div>
+                    <div class="category-card arts">
+                        <span class="icon">🎭</span>
+                        <h3>Arts & Culture</h3>
+                        <p>74 events</p>
+                    </div>
+                    <div class="category-card business">
+                        <span class="icon">💼</span>
+                        <h3>Business</h3>
+                        <p>62 events</p>
+                    </div>
+                    <div class="category-card sports">
+                        <span class="icon">⚽</span>
+                        <h3>Sports & Fitness</h3>
+                        <p>55 events</p>
+                    </div>
+                    <div class="category-card more">
+                        <span class="icon">•••</span>
+                        <h3>More</h3>
+                        <p>See all</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <!-- Your Upcoming Events -->
+            <section class="upcoming-widget">
+                <div class="widget-header">
+                    <h3>Your Upcoming</h3>
+                    <a href="#view-all" class="view-all">View all</a>
+                </div>
+
+                <div class="upcoming-items">
+                    <div class="upcoming-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Sunset Music Festival</h4>
+                            <p class="time">📅 24 May 2025 • 2:00 PM</p>
+                            <p class="location">📍 Uhuru Gardens</p>
+                        </div>
+                        <button class="action-btn">→</button>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Digital Nomad Meetup</h4>
+                            <p class="time">📅 28 May 2025 • 6:00 PM</p>
+                            <p class="location">📍 iHub Nairobi</p>
+                        </div>
+                        <button class="action-btn">→</button>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Community Fun Run</h4>
+                            <p class="time">📅 31 May 2025 • 7:00 AM</p>
+                            <p class="location">📍 Karura Forest</p>
+                        </div>
+                        <button class="action-btn">→</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommended For You -->
+            <section class="recommended-widget">
+                <div class="widget-header">
+                    <h3>Recommended For You</h3>
+                    <a href="#view-all" class="view-all">View all</a>
+                </div>
+
+                <div class="recommended-items">
+                    <div class="recommended-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Art in the Park</h4>
+                            <p class="time">📅 17 May 2025 • 10:00 AM</p>
+                            <p class="location">📍 The Nairobi Arboretum</p>
+                        </div>
+                        <button class="favorite-btn">♡</button>
+                    </div>
+
+                    <div class="recommended-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Soulful Sundays</h4>
+                            <p class="time">📅 18 May 2025 • 4:00 PM</p>
+                            <p class="location">📍 K1 Klub House</p>
+                        </div>
+                        <button class="favorite-btn">♡</button>
+                    </div>
+
+                    <div class="recommended-item">
+                        <img src="https://via.placeholder.com/80x60" alt="Event" class="event-thumb">
+                        <div class="item-details">
+                            <h4>Startup Grind Nairobi</h4>
+                            <p class="time">📅 22 May 2025 • 5:30 PM</p>
+                            <p class="location">📍 Metta Nairobi</p>
+                        </div>
+                        <button class="favorite-btn">♡</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar -->
+            <section class="calendar-widget">
+                <div class="calendar-header">
+                    <h3>Calendar</h3>
+                    <span>May 2025</span>
+                </div>
+                <div class="calendar">
+                    <div class="calendar-nav">
+                        <button>&lt;</button>
+                        <button>&gt;</button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-label">MON</div>
+                        <div class="day-label">TUE</div>
+                        <div class="day-label">WED</div>
+                        <div class="day-label">THU</div>
+                        <div class="day-label">FRI</div>
+                        <div class="day-label">SAT</div>
+                        <div class="day-label">SUN</div>
+                        
+                        <div class="empty"></div>
+                        <div class="empty"></div>
+                        <div class="empty"></div>
+                        <div class="day">1</div>
+                        <div class="day">2</div>
+                        <div class="day">3</div>
+                        <div class="day">4</div>
+                        
+                        <div class="day">5</div>
+                        <div class="day">6</div>
+                        <div class="day">7</div>
+                        <div class="day">8</div>
+                        <div class="day">9</div>
+                        <div class="day">10</div>
+                        <div class="day">11</div>
+                        
+                        <div class="day">12</div>
+                        <div class="day">13</div>
+                        <div class="day">14</div>
+                        <div class="day">15</div>
+                        <div class="day">16</div>
+                        <div class="day">17</div>
+                        <div class="day">18</div>
+                        
+                        <div class="day">19</div>
+                        <div class="day">20</div>
+                        <div class="day">21</div>
+                        <div class="day">22</div>
+                        <div class="day">23</div>
+                        <div class="day active">24</div>
+                        <div class="day">25</div>
+                        
+                        <div class="day">26</div>
+                        <div class="day">27</div>
+                        <div class="day">28</div>
+                        <div class="day">29</div>
+                        <div class="day">30</div>
+                        <div class="day">31</div>
+                        <div class="empty"></div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
