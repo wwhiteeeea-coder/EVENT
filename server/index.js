@@ -1,4 +1,3 @@
-// server/index.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -16,6 +15,7 @@ const usersRoutes = require('./routes/users');
 const savedRoutes = require('./routes/saved');
 const notificationsRoutes = require('./routes/notifications');
 const messagesRoutes = require('./routes/messages');
+const internalRoutes = require('./routes/internal');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventsRoutes);
@@ -25,6 +25,9 @@ app.use('/api/users', usersRoutes);
 app.use('/api', savedRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/messages', messagesRoutes);
+
+// Dev-only internal endpoints
+app.use('/api/internal', internalRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
