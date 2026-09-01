@@ -69,6 +69,49 @@
 
   function openDayModal(day, events){
     let modal = document.getElementById('calendarDayModal');
+    const previouslyFocused = document.activeElement;
+
+    // Helper to remove modal and cleanup
+    function removeModal() {
+      if (!modal) return;
+      // remove listeners we added
+      modal.removeEventListener('keydown', keydownHandler);
+      modal.querySelector('.modal-close')?.removeEventListener('click', closeHandler);
+      document.removeEventListener('focus', focusGuard, true);
+      // remove modal from DOM
+      modal.remove();
+      modal = null;
+      // restore scrolling
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      // restore focus
+      try { if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus(); } catch(e){/* ignore */ }
+    }
+
+    function closeHandler(){ removeModal(); }
+
+    function keydownHandler(e){
+      if (e.key === 'Escape') { removeModal(); return; }
+      if (e.key !== 'Tab') return;
+      // Focus trap
+      const focusable = Array.from(modal.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])'))
+        .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    // Focus guard: if something outside modal gets focus, bring focus back to modal
+    function focusGuard(e){
+      if (!modal) { document.removeEventListener('focus', focusGuard, true); return; }
+      if (!modal.contains(e.target)) {
+        const focusable = Array.from(modal.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1")'))
+          .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+        if (focusable.length) focusable[0].focus();
+      }
+    }
+
     if (!modal) {
       modal = document.createElement('div');
       modal.id = 'calendarDayModal';
@@ -80,12 +123,25 @@
           <div id="modalBody"></div>
         </div>`;
       document.body.appendChild(modal);
-      modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+      // wire close button and keyboard handler
+      modal.querySelector('.modal-close').addEventListener('click', closeHandler);
+      modal.addEventListener('keydown', keydownHandler);
+      // prevent background from scrolling while modal is open
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-wire handlers (safe if they were removed)
+      modal.querySelector('.modal-close').addEventListener('click', closeHandler);
+      modal.addEventListener('keydown', keydownHandler);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     }
 
+    // populate title/body (same as before)
     const monthName = formatMonthLabel(viewedDate);
     modal.querySelector('#modalTitle').textContent = `Events on ${monthName} ${day}`;
     const body = modal.querySelector('#modalBody');
+
     if (!events.length) {
       body.innerHTML = '<p>No events for this day.</p>';
     } else {
@@ -101,6 +157,8 @@
           </div>
         </div>
       `).join('');
+
+      // re-wire inline buttons (same as existing)
       body.querySelectorAll('.save-inline').forEach(btn => {
         btn.addEventListener('click', async () => {
           try {
@@ -121,7 +179,15 @@
         });
       });
     }
+
+    // show and focus the modal
     modal.style.display = 'block';
+    // focus first interactive element (close button preferred)
+    const firstFocus = modal.querySelector('button, a, [tabindex]:not([tabindex="-1"])');
+    if (firstFocus && firstFocus.focus) firstFocus.focus();
+
+    // add focus guard to prevent focus leaving modal
+    document.addEventListener('focus', focusGuard, true);
   }
 
   if (prevBtn) prevBtn.addEventListener('click', () => {
