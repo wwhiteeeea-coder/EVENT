@@ -35,6 +35,27 @@
                 <p class="line">Don't miss out the next event.</p>
             </div>
         </section>
+
+        <!-- Create Event Form -->
+        <section class="create-event" style="padding:24px; max-width:900px; margin:30px auto; background:rgba(255,255,255,0.02); border-radius:8px;">
+          <h2 style="color:#fff;">Create Event</h2>
+          <div id="formError" class="alert error" style="display:none; color:#ff6b6b; margin-bottom:10px;"></div>
+          <div id="formSuccess" class="alert success" style="display:none; color:#4ade80; margin-bottom:10px;"></div>
+
+          <form id="createEventForm">
+            <div class="form-group"><label style="color:#ddd;">Title</label><input id="title" required></div>
+            <div class="form-group"><label style="color:#ddd;">Description</label><textarea id="description"></textarea></div>
+            <div class="form-group"><label style="color:#ddd;">Category</label><input id="category"></div>
+            <div class="form-group"><label style="color:#ddd;">Location</label><input id="location"></div>
+            <div class="form-group"><label style="color:#ddd;">Date</label><input id="date" type="date" required></div>
+            <div class="form-group"><label style="color:#ddd;">Time</label><input id="time" type="time" required></div>
+            <div class="form-group"><label style="color:#ddd;">End time</label><input id="endTime" type="time"></div>
+            <div class="form-group"><label style="color:#ddd;">Price</label><input id="price" type="number" step="0.01"></div>
+            <div class="form-group"><label style="color:#ddd;">Max capacity</label><input id="maxCapacity" type="number"></div>
+            <div class="form-group"><label style="color:#ddd;">Image URL</label><input id="image_url" placeholder="https://... (use image URL)"></div>
+            <button type="submit">Create Event</button>
+          </form>
+        </section>
     </div>
 
     <footer>
@@ -43,5 +64,10 @@
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+      // Set your backend base URL here or remove to default to same origin.
+      window.API_BASE_URL = window.API_BASE_URL || window.location.origin;
+    </script>
+    <script src="js/new-event.js"></script>
 </body>
 </html>
