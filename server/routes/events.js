@@ -6,12 +6,18 @@ const { authenticateToken } = require('../middleware/auth');
 // GET /api/events - list events with optional filters
 router.get('/', async (req, res) => {
   try {
-    const { category, location, search, organizer_id } = req.query;
+    const { category, location, search, organizer_id, month } = req.query;
     let query = supabase.from('events').select('*');
 
     if (category) query = query.eq('category', category);
     if (location) query = query.eq('location', location);
     if (organizer_id) query = query.eq('organizer_id', organizer_id);
+
+    // If month filter provided in format YYYY-MM, filter event_date like 'YYYY-MM%'
+    if (month) {
+      // supabase-js supports .like for pattern matching
+      query = query.like('event_date', `${month}%`);
+    }
 
     // basic search on title or description
     const { data, error } = await query;
