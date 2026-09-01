@@ -1,95 +1,65 @@
-// ======================================
-// Event Next Door - My Bookings Script
-// ======================================
-
-document.addEventListener("DOMContentLoaded", () => {
-    if (!AuthAPI.isAuthenticated()) {
-        window.location.href = "login.html";
+document.addEventListener('DOMContentLoaded', function() {
+    if (!authUtils.isAuthenticated()) {
+        authUtils.redirectToLogin();
         return;
     }
+
+    const container = document.getElementById('bookingsContainer');
+    async function loadBookings() {
+        if (!container) return;
+        container.innerHTML = '<p>Loading bookings...</p>';
+        try {
+            const res = await authUtils.apiCall('/bookings');
+            if (!res || !res.success) {
+                container.innerHTML = `<p class=\"events-status events-error\">${(res && res.message) || 'Unable to load bookings'}</p>`;
+                return;
+            }
+            renderBookings(res.data || []);
+        } catch (err) {
+            console.error('Bookings error', err);
+            container.innerHTML = `<p class=\"events-status events-error\">Error loading bookings: ${err.message}</p>`;
+        }
+    }
+
+    function renderBookings(bookings) {
+        if (!container) return;
+        if (!bookings.length) {
+            container.innerHTML = '<p>No bookings found.</p>';
+            return;
+        }
+        container.innerHTML = bookings.map(b => bookingCard(b)).join('');
+        // attach cancel handlers
+        document.querySelectorAll('.booking-cancel-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.bookingId;
+                if (!confirm('Cancel this booking?')) return;
+                try {
+                    await authUtils.apiCall(`/bookings/${id}`, 'DELETE');
+                    authUtils.showSuccess('formSuccess', 'Booking cancelled');
+                    await loadBookings();
+                } catch (err) {
+                    console.error('Cancel error', err);
+                    authUtils.showError('formError', err.message || 'Could not cancel booking');
+                }
+            });
+        });
+    }
+
+    function bookingCard(b) {
+        const title = b.event?.title || 'Event';
+        const date = b.event?.event_date || b.booking_date || b.bookingDate || 'Date';
+        return `
+            <div class="booking-card">
+                <h3>${escapeHtml(title)}</h3>
+                <p>Date: ${escapeHtml(String(date))}</p>
+                <p>Tickets: ${escapeHtml(String(b.ticket_count || 1))}</p>
+                <p>Status: ${escapeHtml(b.status || 'confirmed')}</p>
+                <button class="booking-cancel-btn" data-booking-id="${b.id}">Cancel booking</button>
+            </div>
+        `;
+    }
+
+    function escapeHtml(s){ const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML; }
 
     loadBookings();
 });
-
-async function loadBookings() {
-    const container = document.getElementById("bookingsContainer");
-    if (!container) return;
-
-    container.innerHTML = `<p style="text-align:center;color:rgb(246,242,242);">Loading your bookings...</p>`;
-
-    const response = await BookingsAPI.getMyBookings();
-
-    if (!response.success) {
-        container.innerHTML = `<p style="text-align:center;color:#ff8a8a;">${escapeHtml(response.message || "Could not load your bookings.")}</p>`;
-        return;
-    }
-
-    const bookings = response.bookings || [];
-
-    if (bookings.length === 0) {
-        container.innerHTML = `<p style="text-align:center;color:rgb(246,242,242);">You haven't booked any events yet.</p>`;
-        return;
-    }
-
-    container.innerHTML = bookings.map(buildBookingCard).join("");
-
-    container.querySelectorAll("[data-cancel-id]").forEach((btn) => {
-        btn.addEventListener("click", () => handleCancel(btn.dataset.cancelId));
-    });
-}
-
-function buildBookingCard(booking) {
-    // These come from the joined query in bookingController.getUserBookings —
-    // "events" and "event_tiers" are the alias names used in that select().
-    const event = booking.events || {};
-    const tier = booking.event_tiers || {};
-
-    const dateLabel = formatDate(event.date);
-    const isCancelled = booking.status === "cancelled";
-    const total = Number(booking.total_price || 0).toLocaleString();
-
-    return `
-        <div class="booking-card">
-            <h3>${escapeHtml(event.title || "Event")}</h3>
-            <p>${dateLabel}${event.location ? " · " + escapeHtml(event.location) : ""}</p>
-            <p>Ticket: ${escapeHtml(tier.name || "—")} × ${booking.quantity}</p>
-            <p>Total: KSh ${total}</p>
-            <p>Status: <strong class="${isCancelled ? "booking-status-cancelled" : ""}">${escapeHtml(booking.status || "confirmed")}</strong></p>
-            ${!isCancelled ? `<button class="booking-cancel-btn" data-cancel-id="${booking.id}">Cancel Booking</button>` : ""}
-        </div>
-    `;
-}
-
-async function handleCancel(bookingId) {
-    if (!confirm("Cancel this booking?")) {
-        return;
-    }
-
-    const response = await BookingsAPI.cancelBooking(bookingId);
-
-    if (!response.success) {
-        alert(response.message || "Could not cancel this booking.");
-        return;
-    }
-
-    // Reload the list so the cancelled booking's status/button updates
-    loadBookings();
-}
-
-function formatDate(dateString) {
-    if (!dateString) return "Date TBA";
-    const d = new Date(dateString);
-    if (Number.isNaN(d.getTime())) return dateString;
-    return d.toLocaleDateString(undefined, {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-    });
-}
-
-function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = String(str);
-    return div.innerHTML;
-}
