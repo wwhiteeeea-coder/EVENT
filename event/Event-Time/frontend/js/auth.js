@@ -1,9 +1,13 @@
 /* ============================================
    Form Validation & Utility Functions
+   Updated: API base URL and improved apiCall handling
    ============================================ */
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// API base - frontend can override by setting window.API_BASE_URL before scripts load
+const API_BASE = window.API_BASE_URL || (window.location.origin.includes('http') ? window.location.origin : 'http://localhost:3000');
 
 // Password strength checker
 function checkPasswordStrength(password) {
@@ -56,7 +60,8 @@ function clearAllErrors(formId) {
     if (form) {
         form.querySelectorAll('.form-group').forEach(group => {
             group.classList.remove('error', 'success');
-            group.querySelector('.form-error').textContent = '';
+            const err = group.querySelector('.form-error');
+            if (err) err.textContent = '';
         });
     }
 }
@@ -66,9 +71,11 @@ function setFieldError(fieldId, message) {
     const field = document.getElementById(fieldId);
     if (field) {
         const formGroup = field.closest('.form-group');
+        if (!formGroup) return;
         formGroup.classList.add('error');
         formGroup.classList.remove('success');
-        formGroup.querySelector('.form-error').textContent = message;
+        const err = formGroup.querySelector('.form-error');
+        if (err) err.textContent = message;
     }
 }
 
@@ -77,14 +84,17 @@ function setFieldSuccess(fieldId) {
     const field = document.getElementById(fieldId);
     if (field) {
         const formGroup = field.closest('.form-group');
+        if (!formGroup) return;
         formGroup.classList.remove('error');
         formGroup.classList.add('success');
-        formGroup.querySelector('.form-error').textContent = '';
+        const err = formGroup.querySelector('.form-error');
+        if (err) err.textContent = '';
     }
 }
 
 // Toggle button loading state
 function setButtonLoading(buttonElement, isLoading) {
+    if (!buttonElement) return;
     if (isLoading) {
         buttonElement.classList.add('loading');
         buttonElement.disabled = true;
@@ -135,29 +145,45 @@ function redirectToLogin() {
     window.location.href = 'login.html';
 }
 
-// API call helper
-async function apiCall(endpoint, method = 'GET', data = null) {
-    const options = {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getAuthToken()}`
-        }
+// API call helper - uses API_BASE and includes Authorization header when token exists
+async function apiCall(endpoint, method = 'GET', data = null, raw = false) {
+    const url = `${API_BASE}/api${endpoint}`;
+    const headers = {
+        'Content-Type': 'application/json'
     };
+    const token = getAuthToken();
+    if (token) headers['Authorization'] = `Bearer ${token}`;
 
+    const options = { method, headers };
     if (data) {
         options.body = JSON.stringify(data);
     }
 
     try {
-        const response = await fetch(`/api${endpoint}`, options);
-        
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'An error occurred');
+        const response = await fetch(url, options);
+
+        // If unauthorized, clear token and redirect to login
+        if (response.status === 401 || response.status === 403) {
+            clearAuthToken();
+            // if current page isn't login, redirect
+            if (!window.location.pathname.includes('login')) {
+                redirectToLogin();
+            }
+            throw new Error('Unauthorized');
         }
 
-        return await response.json();
+        // 204 No Content
+        if (response.status === 204) return {};
+
+        const text = await response.text();
+        const json = text ? JSON.parse(text) : {};
+
+        if (!response.ok) {
+            const message = (json && json.message) ? json.message : `HTTP ${response.status}`;
+            throw new Error(message);
+        }
+
+        return raw ? text : json;
     } catch (error) {
         console.error('API Error:', error);
         throw error;
@@ -166,6 +192,7 @@ async function apiCall(endpoint, method = 'GET', data = null) {
 
 // Export functions for use in other files
 window.authUtils = {
+    API_BASE,
     validateEmail,
     validatePhone,
     checkPasswordStrength,
