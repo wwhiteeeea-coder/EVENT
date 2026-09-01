@@ -1,149 +1,68 @@
-/* ============================================
-   Dashboard Handler
-   ============================================ */
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is authenticated
+    // Ensure user is authenticated
     if (!authUtils.isAuthenticated()) {
-        authUtils.redirectToLogin();
-        return;
+        // If not authenticated, keep page partially usable but prompt login for actions
+        console.log('Not authenticated - some features disabled');
     }
 
-    // Get user data
-    const userData = authUtils.getUserData();
-
-    // Update user info in sidebar
-    const userGreeting = document.getElementById('userGreeting');
-    if (userGreeting && userData) {
-        userGreeting.textContent = `Welcome, ${userData.firstName}!`;
-    }
-
-    // Search functionality
-    const searchInput = document.getElementById('searchInput');
-    searchInput?.addEventListener('input', function(e) {
-        const query = e.target.value.toLowerCase();
-        console.log('Search query:', query);
-        // Implement search logic here
-    });
-
-    // Location selector
-    const locationSelect = document.getElementById('locationSelect');
-    locationSelect?.addEventListener('change', function(e) {
-        console.log('Location selected:', e.target.value);
-        // Implement location filtering here
-    });
-
-    // Create Event buttons
-    const createEventBtns = document.querySelectorAll('.btn-create-event, .btn-create-event-header');
-    createEventBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            window.location.href = 'new.html';
-        });
-    });
-
-    // Navigation items
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            if (!this.href.includes('#')) {
-                return;
-            }
-            e.preventDefault();
-            
-            navItems.forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-
-    // Notification button
+    // Notifications
     const notificationBtn = document.querySelector('.notification-btn');
-    notificationBtn?.addEventListener('click', function() {
-        console.log('Notifications clicked');
-        // Implement notifications here
-    });
-
-    // User avatar menu
-    const userAvatarHeader = document.querySelector('.user-avatar-header');
-    userAvatarHeader?.addEventListener('click', function() {
-        console.log('User menu clicked');
-        // Implement user menu here
-    });
-
-    // Event cards - save button
-    const saveButtons = document.querySelectorAll('.save-btn');
-    saveButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            this.textContent = this.textContent === '📌' ? '🔖' : '📌';
-            this.style.opacity = this.textContent === '🔖' ? '1' : '0.5';
-        });
-    });
-
-    // Category cards
-    const categoryCards = document.querySelectorAll('.category-card');
-    categoryCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const category = this.querySelector('h3').textContent;
-            if (category !== 'More') {
-                console.log('Category selected:', category);
-                // Implement category filtering
-            }
-        });
-    });
-
-    // Upcoming items - action buttons
-    const actionButtons = document.querySelectorAll('.action-btn');
-    actionButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            console.log('Event action clicked');
-            // Implement event details navigation
-        });
-    });
-
-    // Recommended items - favorite buttons
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
-    favoriteButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            this.textContent = this.textContent === '♡' ? '♥' : '♡';
-            this.style.color = this.textContent === '♥' ? '#EF4444' : 'var(--text-muted)';
-        });
-    });
-
-    // Calendar navigation
-    const calendarNavBtns = document.querySelectorAll('.calendar-nav button');
-    calendarNavBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            console.log('Calendar navigation clicked');
-            // Implement calendar navigation
-        });
-    });
-
-    // Calendar day selection
-    const calendarDays = document.querySelectorAll('.day');
-    calendarDays.forEach(day => {
-        day.addEventListener('click', function() {
-            calendarDays.forEach(d => d.classList.remove('active'));
-            this.classList.add('active');
-            console.log('Date selected:', this.textContent);
-        });
-    });
-
-    // Logout function
-    window.logout = function() {
-        authUtils.clearAuthToken();
-        authUtils.redirectToLogin();
-    };
-
-    // Load events from API
-    async function loadEvents() {
+    notificationBtn?.addEventListener('click', async function() {
         try {
-            // Replace with actual API endpoint
-            // const events = await authUtils.apiCall('/events');
-            console.log('Loading events...');
-        } catch (error) {
-            console.error('Error loading events:', error);
+            const res = await authUtils.apiCall('/notifications');
+            if (res && res.success) {
+                showNotifications(res.data);
+            }
+        } catch (err) {
+            console.error('Notifications error', err);
+            authUtils.showError('errorMessage', err.message || 'Failed to load notifications');
+        }
+    });
+
+    function showNotifications(items) {
+        // Simple modal/list for demo purpose
+        const html = items.map(n => `<div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.04)"><strong>${escapeHtml(n.title)}</strong><div>${escapeHtml(n.message)}</div><small>${new Date(n.created_at).toLocaleString()}</small></div>`).join('');
+        const w = window.open('', 'Notifications', 'width=400,height=600');
+        w.document.body.style.background = '#081026';
+        w.document.body.style.color = '#fff';
+        w.document.body.innerHTML = `<h3 style="padding:8px;">Notifications</h3><div>${html}</div>`;
+    }
+
+    // Calendar: load events for current month
+    async function loadCalendar(monthISO) {
+        // monthISO e.g. '2026-05'
+        try {
+            const res = await authUtils.apiCall('/events'); // server currently supports filtering server-side if query params provided
+            if (res && res.success) {
+                // Filter client-side by month
+                const events = (res.data || []).filter(ev => {
+                    const evDate = ev.event_date || ev.date || null;
+                    if (!evDate) return false;
+                    return evDate.startsWith(monthISO);
+                });
+                markCalendarDays(events);
+            }
+        } catch (err) {
+            console.error('Calendar load error', err);
         }
     }
 
-    // Load events on page load
-    loadEvents();
+    function markCalendarDays(events) {
+        // Find .calendar-grid .day elements and mark ones that have events
+        const days = document.querySelectorAll('.calendar-grid .day');
+        days.forEach(d => d.classList.remove('has-event'));
+        events.forEach(ev => {
+            const day = new Date(ev.event_date || ev.date).getDate();
+            const el = Array.from(days).find(x => x.textContent.trim() == String(day));
+            if (el) el.classList.add('has-event');
+        });
+    }
+
+    // initialize calendar for current month
+    const now = new Date();
+    const monthISO = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    loadCalendar(monthISO);
+
 });
+
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML; }
